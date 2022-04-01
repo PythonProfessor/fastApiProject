@@ -3,7 +3,7 @@
 """
 from fastapi import APIRouter
 
-from REST_API.schemas.entities import EntityResponse, EntityDetail, EntityThrow, EntityPickUp
+from REST_API.schemas.entities import EntityResponse, EntityDetail, EntityThrow, EntityPickUp, EntityLevelUp
 from REST_API.views import entities as entities_views
 
 router = APIRouter()
@@ -27,3 +27,11 @@ async def throw_pet_to_island(pet: EntityThrow):
 @router.post('/pick_up_pet_from_island')
 async def pick_up_pet_from_island(pet: EntityPickUp):
     return await entities_views.pick_up_pet_from_island(pet)
+
+
+@router.post('/level_up')
+async def level_up(pet: EntityLevelUp):
+    return await entities_views.level_up(pet)
+
+
+

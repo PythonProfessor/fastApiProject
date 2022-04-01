@@ -3,7 +3,7 @@
 конкретно для животинок
 """
 
-from REST_API.schemas.entities import EntityResponse, EntityDetail, EntityThrow, EntityPickUp
+from REST_API.schemas.entities import EntityResponse, EntityDetail, EntityThrow, EntityPickUp, EntityLevelUp
 from REST_API.utils.entities import Entity
 
 from REST_API.decorators import auth
@@ -13,6 +13,10 @@ from functools import wraps
 
 # TODO значит, везде нужно менять state/move_status  into the CRUD operations
 
+
+"""
+В общем и целом можно использовать класс EntityViews какой-то для удобства взаимодействия с юзером
+"""
 @auth
 async def pet_detail(pet: EntityDetail):
     """
@@ -40,6 +44,10 @@ async def pick_up_pet_from_island(pet: EntityPickUp):
                                      pet_type=pet.pet_type, all_pets=pet.all_pets)
 
 
+@auth
+async def level_up(pet: EntityLevelUp):
+    return await Entity.level_up(hard_token=pet.hard_token, pet_id=pet.pet_id, pet_type=pet.pet_type)
+
 # event_pack / event_details -- not so necessesarily
 
 # level up
@@ -49,27 +57,16 @@ async def pick_up_pet_from_island(pet: EntityPickUp):
 # parents tree
 
 
-
-
-
-
-
-
-
-
-
-
-
-    # """ Создает нового пользователя в БД    UserCreate используется для ввода данных, тоесть фактически Fast Api юзает это!"""
-    # salt = get_random_string()
-    # hashed_password = hash_password(user.password, salt)
-    # query = users_table.insert().values(
-    #     username=user.username, hashed_password=f"{salt}${hashed_password}",
-    #     is_active=True, is_staff=False)
-    # user_id = await database.execute(query)     # getting the specific user
-    # tokens = await User.create_user_token(user_id)      # creating tokens for specific user
-    # token_dict = {"hard_token": tokens["hard_token"], "soft_token": tokens["soft_token"]}
-    # await Entity.generate_test_pets(user_id)
-    # response = {**user.dict(), "id": user_id, "is_active": True}
-    # response.update(token_dict)
-    # return response
+# """ Создает нового пользователя в БД    UserCreate используется для ввода данных, тоесть фактически Fast Api юзает это!"""
+# salt = get_random_string()
+# hashed_password = hash_password(user.password, salt)
+# query = users_table.insert().values(
+#     username=user.username, hashed_password=f"{salt}${hashed_password}",
+#     is_active=True, is_staff=False)
+# user_id = await database.execute(query)     # getting the specific user
+# tokens = await User.create_user_token(user_id)      # creating tokens for specific user
+# token_dict = {"hard_token": tokens["hard_token"], "soft_token": tokens["soft_token"]}
+# await Entity.generate_test_pets(user_id)
+# response = {**user.dict(), "id": user_id, "is_active": True}
+# response.update(token_dict)
+# return response

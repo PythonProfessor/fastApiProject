@@ -142,4 +142,33 @@ token_table = sqlalchemy.Table(
     sqlalchemy.Column('user_id', sqlalchemy.ForeignKey('users.id', ondelete="CASCADE"))
 )
 
+
+event_table = sqlalchemy.Table(
+    'event',
+    metadata,
+    sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True),
+    sqlalchemy.Column("type", sqlalchemy.String()),
+    sqlalchemy.Column("timestamp", sqlalchemy.Integer),
+    sqlalchemy.Column('title', sqlalchemy.String()),
+    sqlalchemy.Column('text', sqlalchemy.String()),
+    sqlalchemy.Column('for_pet_type', sqlalchemy.String()),
+    sqlalchemy.Column('for_pet_id', sqlalchemy.Integer),
+    sqlalchemy.Column('sent', sqlalchemy.Boolean),
+    sqlalchemy.Column('data', sqlalchemy.JSON),
+    sqlalchemy.Column('owner_id', sqlalchemy.ForeignKey('users.id', ondelete="CASCADE"))
+
+)
+
+pairing_table = sqlalchemy.Table(
+    'pairing',
+    metadata,
+    sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True),
+    sqlalchemy.Column("start_time", sqlalchemy.Integer),
+    sqlalchemy.Column("finish_time", sqlalchemy.Integer),
+    sqlalchemy.Column('pet_type', sqlalchemy.String()),
+    sqlalchemy.Column('pet_id_1', sqlalchemy.Integer),
+    sqlalchemy.Column('pet_id_2', sqlalchemy.Integer),
+    sqlalchemy.Column('child_data', sqlalchemy.JSON),
+)
+
 # here has to be imported all databases world_table --> td tp

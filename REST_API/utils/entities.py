@@ -6,6 +6,7 @@ from sqlalchemy import and_
 
 from REST_API.utils.tokens import Token
 from REST_API.utils.users import User
+from REST_API.utils.wallets import Wallet
 from main import database
 from models.tokens import token_table
 from models.users import users_table
@@ -70,9 +71,10 @@ class Entity:
         user = dict(await User.get_user_by_token(hard_token=hard_token))
         if not all_pets:
             # filtering the pet according to id and updating database
-            query = entity_table.update().where(and_(entity_table.c.owner_id == user['id'],
-                                                     entity_table.c.id == pet_id,
-                                                     entity_table.c.pet_type == pet_type)).values(world_id=None)
+            query = entity_table.update().where(
+                and_(entity_table.c.owner_id == user['id'],
+                     entity_table.c.id == pet_id,
+                     entity_table.c.pet_type == pet_type)).values(world_id=None)
         else:
             # filtering the pet according to id
             query = entity_table.update().where(entity_table.c.owner_id == user['id']).values(world_id=None)
@@ -83,6 +85,29 @@ class Entity:
         # d = {} --> it is an opprotunity to iterate through all pets NOTE: will be usefull for Valhalla
         # for entity in list(data):
         #     print(dict(entity))     # словарь питомцев получаем !
+
+    @staticmethod
+    def check_level(level: int):
+        return 0 < level <= 10
+
+    @staticmethod
+    async def level_up(hard_token: str, pet_type: str, pet_id: int):
+        from REST_API.config.prices import PRICES  # importing the price of a new level
+        # user = dict(await User.get_user_by_token(hard_token=hard_token))  # получаем юзера\
+        print(pet_id)
+        ent_q = entity_table.select().where(entity_table.c.id == pet_id)  # getting the instance of the rabbit
+        new_level = dict(await database.fetch_one(ent_q))['level'] + 1  # getting a new level
+        money_to_pay = PRICES.get(new_level)  # reading the data
+        if not Entity.check_level(new_level) or not await Wallet.check_balance_to_update_level(money_to_pay,hard_token):
+            # here should be validation on wallet if the amount of money is small or max level
+            return {f"Error it is impossible to upgrade your level it is max or "
+                    f"you don't have enough money": False}
+        update_level_query = entity_table.update().where(and_( # updating level of the pet
+            entity_table.c.pet_type == pet_type,
+            entity_table.c.id == pet_id
+        )).values(level=new_level)
+        await database.fetch_one(update_level_query)
+        return {"The level is updated": new_level}
 
     """
     Check validation after all

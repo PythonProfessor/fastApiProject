@@ -65,4 +65,4 @@ async def login(user:UserLogin):
         return {"Incorrect password": False}
     return db_user
 
-#update settings
+# update settings

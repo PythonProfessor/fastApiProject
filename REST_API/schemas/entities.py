@@ -5,6 +5,7 @@ from typing import Optional, Union
 
 from pydantic import BaseModel, Json
 
+
 class EntityDetail(BaseModel):
     """ Проверяет login запрос """
     # email: EmailStr
@@ -31,18 +32,20 @@ class EntityResponse(BaseModel):
     race: Json
     name: str
 
-#TODO change all comments
+
+# TODO change all comments
 
 class Island(BaseModel):
     island_id: int
     square_num: int
+
 
 class EntityThrow(BaseModel):
     """ Проверяет login запрос """
     hard_token: str
     pet_type: str
     pet_id: int
-    island: Island         # how to get the island
+    island: Island  # how to get the island
 
 
 class EntityPickUp(BaseModel):
@@ -51,3 +54,9 @@ class EntityPickUp(BaseModel):
     pet_type: str
     pet_id: int
     all_pets: bool
+
+
+class EntityLevelUp(BaseModel):
+    hard_token: str
+    pet_type: str
+    pet_id: int

@@ -34,6 +34,7 @@ from REST_API.utils.users import User
 def auth(func):
     @wraps(func)
     async def wrapper(*args, **kwargs):
+        print(f"args: {args}, kwargs: {kwargs}")
         data = dict(args[0])    # *  ('hard_token', 'hard??1648728241.4256487') ('pet_type', 'rabbit') ('pet_id', 10)
         print(data)
         if not await User.get_user_by_token(data['hard_token']):      # without await!
