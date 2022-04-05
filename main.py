@@ -36,3 +36,8 @@ from REST_API.routers import users , entities
 
 app.include_router(users.router)
 app.include_router(entities.router)
+
+
+#from Sockets.first_screen_socket import *
+
+#router.add_websocket_route("/ws", WebSocketHandler)

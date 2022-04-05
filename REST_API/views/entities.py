@@ -2,6 +2,7 @@
 Этот модуль отвечает за логи  которая принимает Web-запрос и возвращает Web-ответы + взаимодействует с БД, игровым миром
 конкретно для животинок
 """
+from typing import List
 
 from REST_API.schemas.entities import EntityResponse, EntityDetail, EntityThrow, EntityPickUp, EntityLevelUp
 from REST_API.utils.entities import Entity
@@ -10,13 +11,14 @@ from REST_API.decorators import auth
 
 from functools import wraps
 
-
 # TODO значит, везде нужно менять state/move_status  into the CRUD operations
-
+from REST_API.utils.pairing import Pairing
 
 """
 В общем и целом можно использовать класс EntityViews какой-то для удобства взаимодействия с юзером
 """
+
+
 @auth
 async def pet_detail(pet: EntityDetail):
     """
@@ -47,6 +49,16 @@ async def pick_up_pet_from_island(pet: EntityPickUp):
 @auth
 async def level_up(pet: EntityLevelUp):
     return await Entity.level_up(hard_token=pet.hard_token, pet_id=pet.pet_id, pet_type=pet.pet_type)
+
+
+@auth
+async def pairing(pets: List[EntityDetail]):
+    return await Pairing.pairing(pets)
+
+
+@auth
+async def test_get_one_pet(pet: EntityDetail):
+    return await Entity.get_pet_from_db(hard_token=pet.hard_token, pet_id=pet.pet_id, pet_type=pet.pet_type)
 
 # event_pack / event_details -- not so necessesarily
 

@@ -2,7 +2,7 @@
 Этот модуль используется для настройки end пойнтов entities и обрабатываем конечные запросы взаимодействуя с БД
 """
 from fastapi import APIRouter
-
+from typing import List
 from REST_API.schemas.entities import EntityResponse, EntityDetail, EntityThrow, EntityPickUp, EntityLevelUp
 from REST_API.views import entities as entities_views
 
@@ -34,4 +34,11 @@ async def level_up(pet: EntityLevelUp):
     return await entities_views.level_up(pet)
 
 
+@router.post('/pairing')
+async def level_up(pets: List[EntityDetail]):
+    return await entities_views.pairing(pets)
 
+
+@router.post('/test_get_one_pet')
+async def test_get_one_pet(pet:EntityDetail):
+    return await entities_views.test_get_one_pet(pet)

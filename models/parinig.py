@@ -9,7 +9,8 @@ pairing_table = sqlalchemy.Table(
     sqlalchemy.Column("start_time", sqlalchemy.Integer),
     sqlalchemy.Column("finish_time", sqlalchemy.Integer),
     sqlalchemy.Column('pet_type', sqlalchemy.String()),
-    sqlalchemy.Column('pet_id_1', sqlalchemy.Integer),
-    sqlalchemy.Column('pet_id_2', sqlalchemy.Integer),
+    sqlalchemy.Column('pet_id_1', sqlalchemy.ForeignKey('entity.id', ondelete='DELETE')),
+    sqlalchemy.Column('pet_id_2', sqlalchemy.ForeignKey('entity.id', ondelete='DELETE')),
     sqlalchemy.Column('child_data', sqlalchemy.JSON),
 )
+
