@@ -9,6 +9,7 @@ from starlette.routing import Route, WebSocketRoute
 from starlette.websockets import WebSocket
 
 from REST_API.utils.users import User
+from main import app
 
 html = """
 <!DOCTYPE html>
@@ -49,6 +50,7 @@ class Homepage(HTTPEndpoint):
     async def get(self, request):
         return HTMLResponse(html)
 
+
 # class Echo(WebSocketEndpoint):
 #     encoding = "text"
 #
@@ -61,6 +63,33 @@ class Homepage(HTTPEndpoint):
 #         return '<h1> Closed </h1>'
 
 
+# @app.get("/")
+# async def get():
+#     return HTMLResponse(html)
+#
+#
+# @app.websocket("/ws")
+# async def websocket_endpoint(websocket: WebSocket):
+#     await websocket.accept()
+#     while True:
+#         data = await websocket.receive_text()
+#         await websocket.send_text(f"Message text was: {data}")
+
+
+
+import asyncio
+import websockets
+
+
+async def hello():
+    uri = "ws://localhost:8000/ws"
+    async with websockets.connect(uri) as websocket:
+        await websocket.send("Hello world!")
+        res = await websocket.recv()
+        print(res)
+
+asyncio.get_event_loop().run_until_complete(hello())
+
 class WebSocketHandler(WebSocketEndpoint):
     encoding = "text"
 
@@ -69,7 +98,7 @@ class WebSocketHandler(WebSocketEndpoint):
 
     # await websocket.send_text(f"Message text was: {data}")
     async def on_connect(self, websocket):
-        #await websocket.accept()
+        # await websocket.accept()
         while True:
             logging.info("Connected")
             await websocket.send_json({"hello": "world"})
@@ -81,13 +110,13 @@ class WebSocketHandler(WebSocketEndpoint):
     async def on_disconnect(self, websocket, close_code):
         print(f"websocket client disconnected, code={close_code}")
 
+# routes = [
+#     Route("/", Homepage),
+#     WebSocketRoute("/ws", WebSocketHandler)
+# ]
 
-routes = [
-    Route("/", Homepage),
-    WebSocketRoute("/ws", WebSocketHandler)
-]
 
-app = Starlette(routes=routes)
+# app = Starlette(routes=routes)
 
 # ======================================================================================================================#
 # class MoneysAndNotificationsConsumer(WebsocketConsumer):

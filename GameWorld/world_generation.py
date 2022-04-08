@@ -7,6 +7,7 @@ from matplotlib.pyplot import figure, imshow, show
 from main import database
 from models.worlds import world_table
 from water_generation import WaterGenerator
+import pickle
 
 import asyncio
 
@@ -65,7 +66,7 @@ class WorldGenerator:
         # функция возвращает кортеж из двух рандомных точек
         return np.random.randint(1000, size=2)
 
-    def create_map(self, percentage_to_cover: float, elements_cords=dict()):
+    def create_map(self, percentage_to_cover: float, elements_cords=list()):
         """
         The function generates map within specific coords and serializes data
         :param percentage_to_cover:
@@ -77,9 +78,9 @@ class WorldGenerator:
             for key in elements.keys():
                 before_fill_coverage = self.coverage()
 
-                if key not in elements_cords.keys():
-                    # elements_cords = {grass: (12,22) --> список кортежей всех координат всех элементов конкретно травы
-                    elements_cords[key] = []  # если ключ новый, то присваеваем второй список
+                # if key not in elements_cords.keys():
+                #     # elements_cords = {grass: (12,22) --> список кортежей всех координат всех элементов конкретно травы
+                #     elements_cords[key] = []  # если ключ новый, то присваеваем второй список
 
                 iterations = self.world_map.shape[0] ** 2  # кол-во итераций (1 млн)
                 if before_fill_coverage + len(elements[key]) / (
@@ -91,8 +92,10 @@ class WorldGenerator:
                     while self.world_map[x][y] != 0:  # ищем рандомную точку где есть пустое место (0)
                         x, y = self.generateRandomPoint()
                     self.world_map[x][y] = value  # вставляем значение например другое 66
-                    elements_cords[key].append(
-                        (int(x), int(y), int(value)))  # тут мы добавляем в наш словарь все координаты травы
+                    if key == 'grass':
+                        elements_cords.append([(int(x), int(y)), 150])
+                    # elements_cords[key].append(
+                    #     (int(x), int(y), int(value)))  # тут мы добавляем в наш словарь все координаты травы
                     iterations -= 1
                     if iterations <= 0:  # выходим из цикла, что бы избавиться от лишних итераций и выйти из цикла
                         break
@@ -115,7 +118,13 @@ class WorldGenerator:
         print(f"The coverage of the water is: {self.coverage()}")
         elements_coords = self.create_map(percentage_to_cover=0.92)  # сколько точек добавить
         # print(elements_coords.keys())
-        with open('el_coords.pickle', 'wb') as f:
+        # with open('el_coords.pickle', 'wb') as f:
+        #     pickle.dump(elements_coords, f)
+        data = self.world_map
+        with open('world_map.pickle', 'wb') as f:
+            pickle.dump(data, f)
+
+        with open('element_coords.pickle', 'wb') as f:
             pickle.dump(elements_coords, f)
         print(f"The coverage of the water + other elements is: {self.coverage()}")
         # self.draw_the_map()
@@ -124,6 +133,8 @@ class WorldGenerator:
         # если надо добить покрытие, то можно использовать функцию повторно --> первую только допишет
         # добавить чтобы элементы, которые будут заполняться как словарь
         return self.world_map.tolist()
+
+
 
 
 async def load_to_db(w_map):
@@ -138,6 +149,3 @@ world_map = world.create_world()
 asyncio.run(load_to_db(world_map))
 
 
-data = world_map
-with open('data.pickle', 'wb') as f:
-    pickle.dump(data, f)

@@ -71,8 +71,7 @@ class User:
         user_query = users_table.select().where(
             users_table.c.id == user_id
         )
-        return await database.fetch_one(user_query)
-
+        return dict(await database.fetch_one(user_query))
         # print(dict(query))
         # return await database.fetch_one(query)
 
@@ -87,3 +86,4 @@ class User:
         )
         # print(await database.fetch_one(query))
         return await database.fetch_one(query)
+

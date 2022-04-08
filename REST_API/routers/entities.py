@@ -35,7 +35,7 @@ async def level_up(pet: EntityLevelUp):
 
 
 @router.post('/pairing')
-async def level_up(pets: List[EntityDetail]):
+async def pairing(pets: List[EntityDetail]):
     return await entities_views.pairing(pets)
 
 

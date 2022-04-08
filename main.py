@@ -32,10 +32,11 @@ async def shutdown():
 
 
 
-from REST_API.routers import users , entities
+from REST_API.routers import users , entities, pairing
 
 app.include_router(users.router)
 app.include_router(entities.router)
+app.include_router(pairing.router)
 
 
 #from Sockets.first_screen_socket import *
