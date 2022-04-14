@@ -1,0 +1,4 @@
+percentages_from_max_hp: 60  # 60% ot max_health
+points_to_heal: 2
+# каждую минуту хилим на 2% от максимального хп,
+#до процентов из хпшечки

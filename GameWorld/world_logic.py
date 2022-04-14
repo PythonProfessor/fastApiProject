@@ -352,10 +352,10 @@ water_id = [20]
 delit_key = []
 
 heal_time_seconds = 30
-damage_time_seconds = 20
+damage_time_seconds = 1
 attraction_time_seconds = 2
 
-grass_heal_per_tick = 30
+grass_heal_per_tick = 30        # tick - heal_time_seconds      1 - время, а 2 - количество сколько увеличивать
 damage_per_tick = 1
 attraction_per_tick = 3
 

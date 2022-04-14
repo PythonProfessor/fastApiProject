@@ -1,6 +1,8 @@
+import json
+from datetime import datetime
 from os import environ
 import databases
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket
 from sqlalchemy.orm import declarative_base
 
 # Конфигурация базы данных
@@ -31,14 +33,8 @@ async def shutdown():
     await database.disconnect()
 
 
-
-from REST_API.routers import users , entities, pairing
+from REST_API.routers import users, entities, pairing
 
 app.include_router(users.router)
 app.include_router(entities.router)
 app.include_router(pairing.router)
-
-
-#from Sockets.first_screen_socket import *
-
-#router.add_websocket_route("/ws", WebSocketHandler)

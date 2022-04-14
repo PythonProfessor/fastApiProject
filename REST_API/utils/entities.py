@@ -119,7 +119,8 @@ class Entity:
         ent_q = entity_table.select().where(entity_table.c.id == pet_id)  # getting the instance of the rabbit
         new_level = dict(await database.fetch_one(ent_q))['level'] + 1  # getting a new level
         money_to_pay = PRICES.get(new_level)  # reading the data
-        if not Entity.check_level(new_level) or not await Wallet.check_balance_to_update_level(money_to_pay,hard_token):
+        if not Entity.check_level(new_level) or not await Wallet.check_balance_to_update_level(money_to_pay,
+                                                                                               hard_token):
             # here should be validation on wallet if the amount of money is small or max level
             return {f"Error it is impossible to upgrade your level it is max or "
                     f"you don't have enough money": False}

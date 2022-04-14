@@ -2,12 +2,22 @@ from fastapi import APIRouter, HTTPException
 from REST_API.schemas import users
 from REST_API.views import users as users_views
 from REST_API.utils import users as users_utils
+#from celery_worker import heal_rabbits
+import celery_worker as cel
 
 """
 Этот модуль используется для настройки end пойнтов Юзера и обрабатываем конечные запросы взаимодействуя с БД
 """
 
 router = APIRouter()
+
+
+@router.get("/")
+async def vallhala():
+    # use delay() method to call the celery task
+    # create_order.delay(order.customer_name, order.order_quantity)
+    cel.heal_rabbits.delay()
+    return {"Success": True}
 
 
 @router.post("/register", response_model=users.UserCreateResponse)
